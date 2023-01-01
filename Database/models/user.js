@@ -13,6 +13,10 @@ const userSchema = new Schema({
     type: String, 
     required: true,
   },
+  isServiceProvider: {
+    type: Boolean,
+    default: false
+  },
   password: {
     type: String,
     required: true

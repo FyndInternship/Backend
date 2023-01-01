@@ -2,6 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser')
 const authRoutes = require('./routes/authenticationRoutes')
+const tiffinRoutes = require('./routes/tiffinRoutes')
+const cookieParser = require('cookie-parser')
 const cors = require('cors');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
@@ -14,7 +16,14 @@ const store = new MongoDBStore({
   });
 
 
-app.use(cors())
+// app.use(cookieParser())
+// app.use(cors())
+
+app.use(  cors({
+  origin: "http://localhost:8080",
+  methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"],
+  credentials: true,
+}))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(
@@ -29,7 +38,7 @@ app.use(
 
 //routes
 app.use('/auth', authRoutes)
-
+app.use('/admin', tiffinRoutes )
 
 
 app.use('/', (req, res) => {

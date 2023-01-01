@@ -9,6 +9,7 @@ try {
     const body = req.body;
     if(body.email ==="" || body.password === "") throw new Error("Invalid Data provided")
     const user =  await User.findOne({email: body.email});
+    console.log(user);
     if(!user) throw new Error("User Not found")
     bcrypt.compare(body.password, user.password, function(err, result) {
         if(err) {
@@ -18,7 +19,8 @@ try {
             req.session.user = user
             req.session.isLoggedIn = true
             req.session.save(err => {
-                throw err;
+                if(err)
+                throw new Error(er);
             })
             return res.status(200).send({
                 data: user
@@ -94,6 +96,7 @@ module.exports = {
     postLogIn,
     postSignUp
 }
+
 
 
 

@@ -13,6 +13,10 @@ const tiffinServiceProvider = new Schema({
     type: String, 
     required: true,
   },
+  isServiceProvider: {
+    type: Boolean,
+    default: true
+  },
   password: {
     type: String,
     required: true
@@ -30,7 +34,13 @@ const tiffinServiceProvider = new Schema({
     pincode: {
         type: Number
     }
-  }
+  },
+  tiffins: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'tiffin'
+    }
+  ]
 });
 
 module.exports = mongoose.model('tiffinServiceProvider', tiffinServiceProvider);
