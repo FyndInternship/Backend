@@ -7,8 +7,15 @@ const { hashValue } = require('../Utils/utils');
 const postLogIn = async (req, res, next) => {
 try {
     const body = req.body;
-    if(body.email ==="" || body.password === "") throw new Error("Invalid Data provided")
-    const user =  await User.findOne({email: body.email});
+    console.log(body)
+    if(body.email ==="" || body.password === "" || body.isServiceProvider === null) throw new Error("Invalid Data provided")
+    let user;
+    // console.log(typeof(body.isServiceProvider))
+    if(body.isServiceProvider === "true")
+     user =  await TiffinServiceProvider.findOne({email: body.email});
+    else 
+    user =  await User.findOne({email: body.email});
+
     console.log(user);
     if(!user) throw new Error("User Not found")
     bcrypt.compare(body.password, user.password, function(err, result) {

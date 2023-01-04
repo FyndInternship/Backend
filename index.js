@@ -3,12 +3,15 @@ const express = require('express');
 const bodyParser = require('body-parser')
 const authRoutes = require('./routes/authenticationRoutes')
 const tiffinRoutes = require('./routes/tiffinRoutes')
+const userRoutes = require('./routes/userRoutes')
 const cookieParser = require('cookie-parser')
 const cors = require('cors');
+const multer = require('multer')
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const establish_connection_db  = require('./Database/index');
 const { handle_custom_error, page_not_found_error } = require('./middlewares/errorHandlerMw');
+const { fileStorage, fileFilter } = require('./Utils/fileUpload');
 const app = express();
 const store = new MongoDBStore({
     uri: process.env.DB_URI,
@@ -16,10 +19,11 @@ const store = new MongoDBStore({
   });
 
 
-// app.use(cookieParser())
-// app.use(cors())
-
-app.use(  cors({
+app.use(multer({
+  storage: fileStorage,
+  fileFilter: fileFilter
+}).single('image'))
+app.use(cors({
   origin: "http://localhost:8080",
   methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"],
   credentials: true,
@@ -39,6 +43,7 @@ app.use(
 //routes
 app.use('/auth', authRoutes)
 app.use('/admin', tiffinRoutes )
+app.use('/user', userRoutes)
 
 
 app.use('/', (req, res) => {

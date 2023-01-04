@@ -28,9 +28,24 @@ const tiffinSchema = new Schema({
   requests: [
     {
         type: Schema.Types.ObjectId,
-        ref: 'User'
-    }
-  ]
+        ref: 'User',
+        unique: true
+    }], 
+    menu: [{
+        imageUrl: {
+            type: String,
+            required: true
+        },
+        publicId: {
+            type: String,
+            required: true
+        },
+        name: {
+            type: String,
+            required: true
+        }
+    }]
+  
 });
 
 module.exports = mongoose.model('tiffin', tiffinSchema);
