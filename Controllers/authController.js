@@ -2,7 +2,6 @@ const User = require('../Database/models/user')
 const TiffinServiceProvider = require('../Database/models/tiffin_service_provider')
 const bcrypt = require('bcrypt');
 const { hashValue } = require('../Utils/utils');
-const { sendMessageToMob } = require('../Utils/twillo');
 
 
 const postLogIn = async (req, res, next) => {
