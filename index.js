@@ -24,7 +24,7 @@ app.use(multer({
   fileFilter: fileFilter
 }).single('image'))
 app.use(cors({
-  origin: "http://localhost:8080",
+  origin: "https://tiffinservice.onrender.com",
   methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD", "DELETE"],
   credentials: true,
 }))
