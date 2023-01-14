@@ -2,21 +2,18 @@ const User = require('../Database/models/user')
 const TiffinServiceProvider = require('../Database/models/tiffin_service_provider')
 const bcrypt = require('bcrypt');
 const { hashValue } = require('../Utils/utils');
+const { sendMessageToMob } = require('../Utils/twillo');
 
 
 const postLogIn = async (req, res, next) => {
 try {
     const body = req.body;
-    console.log(body)
     if(body.email ==="" || body.password === "" || body.isServiceProvider === null) throw new Error("Invalid Data provided")
     let user;
-    // console.log(typeof(body.isServiceProvider))
     if(body.isServiceProvider === "true")
      user =  await TiffinServiceProvider.findOne({email: body.email});
     else 
     user =  await User.findOne({email: body.email});
-
-    console.log(user);
     if(!user) throw new Error("User Not found")
     bcrypt.compare(body.password, user.password, function(err, result) {
         if(err) {
@@ -27,23 +24,26 @@ try {
             req.session.isLoggedIn = true
             req.session.save(err => {
                 if(err)
-                throw new Error(er);
+                throw new Error(err);
             })
             return res.status(200).send({
                 data: user
             });
         } else {
-            return next({
-                status: 402,
-                message: "Wrong Password"
-              })
+            throw new Error("Wrong Password")
         }
     });
     } catch(err) {
-        return next({
-            status: 403,
-            message: err.message
-        })
+        return next(err)
+    }
+}
+
+const logOut = async (req, res, next) => {
+    try {
+        req.session.destroy();
+        res.status(200).send();
+    }catch(err) {
+        next(err)
     }
 }
 
@@ -55,7 +55,7 @@ const postSignUp = async (req, res, next) => {
             throw new Error("Incomplete Credentials")
         }
         let user = null;
-        if(isServiceProvider === true) {
+        if(isServiceProvider === "true") {
             user = await TiffinServiceProvider.findOne({email});
         } else {
             user = await User.findOne({email});
@@ -80,7 +80,7 @@ const postSignUp = async (req, res, next) => {
             address: constructed_address
         };
         let finalUser = null;
-        if(isServiceProvider === true) {
+        if(isServiceProvider === "true") {
             finalUser = new TiffinServiceProvider(newUser);
         } else {
             finalUser = new User(newUser);
@@ -92,16 +92,15 @@ const postSignUp = async (req, res, next) => {
         })
         
     } catch(err) {
-        next({
-            message: err.message
-        })
+        next(err)
     }
 }
 
 
 module.exports = {
     postLogIn,
-    postSignUp
+    postSignUp,
+    logOut
 }
 
 

@@ -18,5 +18,11 @@ const handle_custom_error = (err, req, res, next) => {
       message: "Page Not Found",
     });
   };
+  const authenticationError = () => {
+    const err = new Error()
+    err.status = 401
+    err.message = "Authentication error"
+    return err;
+  }
   
-  module.exports = { handle_custom_error, page_not_found_error };
+  module.exports = { handle_custom_error, page_not_found_error, authenticationError};
