@@ -50,12 +50,11 @@ const logOut = async (req, res, next) => {
 const postSignUp = async (req, res, next) => {
     try {
         const {email, password, name, contact_no, address, isServiceProvider} = req.body;
-
-        if(isServiceProvider === ""  || email === "" || password === "" || name === "" || contact_no === "" || address.state === "" || address.city === "" || address.pincode === "") {
+        if(typeof(isServiceProvider) !== "boolean"  || email === "" || password === "" || name === "" || contact_no === "" || address.state === "" || address.city === "" || address.pincode === "") {
             throw new Error("Incomplete Credentials")
         }
         let user = null;
-        if(isServiceProvider === "true") {
+        if(isServiceProvider === true) {
             user = await TiffinServiceProvider.findOne({email});
         } else {
             user = await User.findOne({email});
@@ -80,7 +79,7 @@ const postSignUp = async (req, res, next) => {
             address: constructed_address
         };
         let finalUser = null;
-        if(isServiceProvider === "true") {
+        if(isServiceProvider === true) {
             finalUser = new TiffinServiceProvider(newUser);
         } else {
             finalUser = new User(newUser);
