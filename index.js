@@ -18,13 +18,19 @@ const store = new MongoDBStore({
     collection: 'sessions'
   });
 
+let orgin = ""
+if(process.env.ENV === "LOCAL")
+orgin = process.env.LOCAL_ORIGIN
+else 
+orgin = process.env.ACTUAL_ORIGIN
+
 
 app.use(multer({
   storage: fileStorage,
   fileFilter: fileFilter
 }).single('image'))
 app.use(cors({
-  origin: "http://localhost:8080",
+  origin: orgin,
   methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD", "DELETE"],
   credentials: true,
 }))
