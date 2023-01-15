@@ -2,15 +2,15 @@ const User = require('../Database/models/user')
 const TiffinServiceProvider = require('../Database/models/tiffin_service_provider')
 const bcrypt = require('bcrypt');
 const { hashValue } = require('../Utils/utils');
-const { sendMessageToMob } = require('../Utils/twillo');
+const { boolean } = require('webidl-conversions');
 
 
 const postLogIn = async (req, res, next) => {
 try {
     const body = req.body;
-    if(body.email ==="" || body.password === "" || body.isServiceProvider === null) throw new Error("Invalid Data provided")
+    if(body.email ==="" || body.password === "" || typeof(body.isServiceProvider) !== "boolean") throw new Error("Invalid Data provided")
     let user;
-    if(body.isServiceProvider === "true")
+    if(body.isServiceProvider === true)
      user =  await TiffinServiceProvider.findOne({email: body.email});
     else 
     user =  await User.findOne({email: body.email});
