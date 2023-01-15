@@ -44,8 +44,9 @@ app.use(
       store: store,
       cookie: {
         sameSite: 'none',
-        secure: true
-      } 
+        secure: true,
+      },
+       
     })
   );
 
