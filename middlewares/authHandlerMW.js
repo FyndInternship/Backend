@@ -3,9 +3,7 @@ const User = require('../Database/models/user');
 const { authenticationError } = require('./errorHandlerMw');
 const authHandlerMW = async (req, res, next) => {
     try{
-        // console.log(req.session.user)
-        // console.log(typeof(req.session.isLoggedIn))
-        console.log()
+
         if(!req.session.user || !req.session.isLoggedIn)
         throw authenticationError()
         if(!req.headers['user-id'] || typeof(JSON.parse(req.headers['is-service-provider'])) !=="boolean")
