@@ -48,7 +48,8 @@ app.use(
       cookie: {
         sameSite: 'none',
         httpOnly: false,
-        domain: process.env.ACTUAL_ORIGIN,
+
+        // domain: process.env.ACTUAL_ORIGIN,
 
       },
        
