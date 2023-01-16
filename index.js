@@ -47,7 +47,6 @@ app.use(
       store: store,
       cookie: {
         sameSite: 'none',
-        secure: true,
         httpOnly: false,
         domain: process.env.ACTUAL_ORIGIN,
 
