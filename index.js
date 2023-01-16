@@ -30,6 +30,7 @@ app.use(cors({
   origin: orgin,
   methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD", "DELETE"],
   credentials: true,
+  exposedHeaders: "set-cookie"
 }))
 
 
