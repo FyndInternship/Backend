@@ -24,18 +24,20 @@ orgin = process.env.LOCAL_ORIGIN
 else 
 orgin = process.env.ACTUAL_ORIGIN
 
-
-app.use(multer({
-  storage: fileStorage,
-  fileFilter: fileFilter
-}).single('image'))
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded());
 app.use(cors({
   origin: orgin,
   methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD", "DELETE"],
   credentials: true,
 }))
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded());
+
+
+
+app.use(multer({
+  storage: fileStorage,
+  fileFilter: fileFilter
+}).single('image'))
 app.use(
     session({
       secret: process.env.SESSION_SECRET,
@@ -45,6 +47,9 @@ app.use(
       cookie: {
         sameSite: 'none',
         secure: true,
+        httpOnly: true,
+        domain: process.env.ACTUAL_ORIGIN,
+
       },
        
     })
