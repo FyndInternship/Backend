@@ -3,6 +3,7 @@ const TiffinServiceProvider = require('../Database/models/tiffin_service_provide
 const bcrypt = require('bcrypt');
 const { hashValue } = require('../Utils/utils');
 const { boolean } = require('webidl-conversions');
+const { signJWT } = require('../Utils/jwt');
 
 
 const postLogIn = async (req, res, next) => {
@@ -15,11 +16,16 @@ try {
     else 
     user =  await User.findOne({email: body.email});
     if(!user) throw new Error("User Not found")
-    bcrypt.compare(body.password, user.password, function(err, result) {
+    bcrypt.compare(body.password, user.password, async function(err, result) {
         if(err) {
             return next(err)
         }
-        if(result === true) {            
+        if(result === true) {  
+            const obj = {
+                'user': user,
+                'isLoggedIn': true
+            }      
+            const token = await signJWT(obj);    
             req.session.user = user
             req.session.isLoggedIn = true
             req.session.save(err => {
@@ -27,7 +33,8 @@ try {
                 throw new Error(err);
             })
             return res.status(200).send({
-                data: user
+                data: user,
+                token,
             });
         } else {
             throw new Error("Wrong Password")

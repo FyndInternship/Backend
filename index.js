@@ -39,6 +39,7 @@ app.use(multer({
   storage: fileStorage,
   fileFilter: fileFilter
 }).single('image'))
+
 app.use(
     session({
       secret: process.env.SESSION_SECRET,
@@ -46,8 +47,8 @@ app.use(
       saveUninitialized: false,
       store: store,
       cookie: {
-        sameSite: 'none',
-        httpOnly: false,
+        // sameSite: 'none',
+        // httpOnly: false,
 
         // domain: process.env.ACTUAL_ORIGIN,
 

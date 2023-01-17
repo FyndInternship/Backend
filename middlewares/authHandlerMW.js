@@ -1,24 +1,32 @@
 const mongoose = require('mongoose');
 const User = require('../Database/models/user');
+const { verifyJWT } = require('../Utils/jwt');
 const { authenticationError } = require('./errorHandlerMw');
 const authHandlerMW = async (req, res, next) => {
     try{
 
-        if(!req.session.user || !req.session.isLoggedIn)
+        console.log(req.headers['access-token'])
+        const token = await verifyJWT(req.headers['access-token'])
+        if(!token || !token.data || !token.data?.user)
+        throw authenticationError()
+
+        const {user, isLoggedIn} = token.data;
+
+        if(!user || !isLoggedIn)
         throw authenticationError()
         if(!req.headers['user-id'] || typeof(JSON.parse(req.headers['is-service-provider'])) !=="boolean")
         throw authenticationError()        
-        if(req.session.user.isServiceProvider != JSON.parse(req.headers['is-service-provider']))
+        if(user.isServiceProvider != JSON.parse(req.headers['is-service-provider']))
         throw authenticationError()        
-        if(req.session.user._id != req.headers['user-id'] )
+        if(user._id != req.headers['user-id'] )
         throw authenticationError()        
 
         //made a special check if user exist or not in db : todo
         
         
-            // User.findOne({_id: req.session.user._id})       
+            // User.findOne({_id: user._id})       
         
-        req.user = req.session.user
+        req.user = user
         next();
     } catch(err) {
         next(err);
