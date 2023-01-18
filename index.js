@@ -48,9 +48,9 @@ app.use(
       cookie: {
         sameSite: 'none',
         httpOnly: true,
-        secure: false,
-        maxAge: 1000*60*60
-
+        secure: true,
+        maxAge: 1000*60*60,
+        domain: "backend-zotq.onrender.com"
         // domain: process.env.ACTUAL_ORIGIN,
 
       },
