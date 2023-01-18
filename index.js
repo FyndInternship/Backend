@@ -48,7 +48,7 @@ app.use(
       cookie: {
         sameSite: 'none',
         httpOnly: true,
-        secure: true,
+        secure: false,
         maxAge: 1000*60*60
 
         // domain: process.env.ACTUAL_ORIGIN,
