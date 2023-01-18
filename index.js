@@ -43,11 +43,13 @@ app.use(
     session({
       secret: process.env.SESSION_SECRET,
       resave: false,
-      saveUninitialized: false,
+      saveUninitialized: true,
       store: store,
       cookie: {
         sameSite: 'none',
-        httpOnly: false,
+        httpOnly: true,
+        secure: true,
+        maxAge: 1000*60*60
 
         // domain: process.env.ACTUAL_ORIGIN,
 
